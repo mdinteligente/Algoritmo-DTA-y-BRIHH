@@ -1,4 +1,4 @@
- import streamlit as st
+import streamlit as st
 
 # Diccionario que contiene los valores de LoD y P99 para cada tipo de ensayo de troponina
 ensayos_troponinas = {
