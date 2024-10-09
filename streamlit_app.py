@@ -61,7 +61,7 @@ def ejecutar_escenario_a():
 def ejecutar_escenario_b(valor_inicial, lod):
     st.write("Ejecutando Escenario B...")
 
-    horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):"))
+    horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):", key="horas_dolor_b"))
     if horas_dolor_toracico is None:
         st.stop()
 
@@ -76,8 +76,8 @@ def ejecutar_escenario_b(valor_inicial, lod):
 def ejecutar_segunda_troponina(valor_inicial, p99):
     st.write("Realizando segunda medición de troponina...")
 
-    unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"])
-    valor_segunda_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la segunda Tnc AS:"))
+    unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_segunda")
+    valor_segunda_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la segunda Tnc AS:", key="valor_segunda_tnc"))
     if valor_segunda_tnc is None:
         st.stop()
 
@@ -99,8 +99,8 @@ def ejecutar_escenario_d1(valor_inicial, p99):
     st.write("Primera troponina >= P99 pero menor a 5xP99.")
     st.write("Realizar segunda medición de troponina.")
 
-    unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"])
-    valor_segunda_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la segunda Tnc AS:"))
+    unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_segunda_d1")
+    valor_segunda_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la segunda Tnc AS:", key="valor_segunda_tnc_d1"))
     if valor_segunda_tnc is None:
         st.stop()
 
@@ -121,11 +121,11 @@ def ejecutar_escenario_d2():
 
 # Función para preguntar por la tercera troponina
 def preguntar_tercera_troponina(valor_inicial, p99):
-    tercera_tnc = st.radio("¿Desea realizar una tercera medición de troponina? (Recomendado solo para deltas limítrofes)", ["Sí", "No"])
+    tercera_tnc = st.radio("¿Desea realizar una tercera medición de troponina? (Recomendado solo para deltas limítrofes)", ["Sí", "No"], key="tercera_tnc")
     
     if tercera_tnc == "Sí":
-        unidades_tercera = st.selectbox("Seleccione las unidades de la tercera Tnc AS:", ["ng/mL", "ng/L", "pg/mL"])
-        valor_tercera_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la tercera Tnc AS:"))
+        unidades_tercera = st.selectbox("Seleccione las unidades de la tercera Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_tercera")
+        valor_tercera_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la tercera Tnc AS:", key="valor_tercera_tnc"))
         if valor_tercera_tnc is None:
             st.stop()
 
@@ -142,7 +142,7 @@ def preguntar_tercera_troponina(valor_inicial, p99):
 
 # Función para preguntar por los síntomas y ECG
 def preguntar_sintomas_ecg():
-    sintomas_ecg = st.radio("¿Síntomas y/o ECG indicativos de isquemia miocárdica aguda?", ["Sí", "No"])
+    sintomas_ecg = st.radio("¿Síntomas y/o ECG indicativos de isquemia miocárdica aguda?", ["Sí", "No"], key="sintomas_ecg")
     if sintomas_ecg == "Sí":
         st.write("Alta probabilidad de Infarto agudo al miocardio No ST.")
     else:
@@ -155,29 +155,29 @@ def main():
     st.markdown("Unidad de Investigación y Educación - Instituto del Corazón de Bucaramanga.")
 
     # Preguntar si hay elevación del segmento ST
-    st_segmento_st = st.radio("¿Hay elevación del segmento ST?", ["Sí", "No"])
+    st_segmento_st = st.radio("¿Hay elevación del segmento ST?", ["Sí", "No"], key="st_segmento_st")
     if st_segmento_st == "Sí":
         ejecutar_escenario_a()
         st.stop()
 
     # Flujo del algoritmo cuando NO hay elevación del segmento ST
-    tipo_ensayo = st.selectbox("Seleccione el tipo de ensayo de troponina", ["T", "I"])
-    referencia_p99 = st.selectbox("Seleccione el P99 de referencia", ["Global", "Hombre", "Mujer"])
+    tipo_ensayo = st.selectbox("Seleccione el tipo de ensayo de troponina", ["T", "I"], key="tipo_ensayo")
+    referencia_p99 = st.selectbox("Seleccione el P99 de referencia", ["Global", "Hombre", "Mujer"], key="referencia_p99")
     
     ensayo = ensayos_troponinas[tipo_ensayo]
     p99 = ensayo[f"P99_{referencia_p99.lower()}"]
     lod = ensayo["LoD"]
 
     # Primera medición de troponina
-    unidades_primera = st.selectbox("Seleccione las unidades de la primera Tnc AS:", ["ng/mL", "ng/L", "pg/mL"])
-    valor_primera_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la primera Tnc AS:"))
+    unidades_primera = st.selectbox("Seleccione las unidades de la primera Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_primera")
+    valor_primera_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la primera Tnc AS:", key="valor_primera_tnc"))
     if valor_primera_tnc is None:
         st.stop()
 
     valor_primera_tnc_convertido = convertir_unidades(valor_primera_tnc, unidades_primera)
 
     # **Preguntar siempre por el tiempo de evolución del dolor torácico**
-    horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):"))
+    horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):", key="horas_dolor"))
     if horas_dolor_toracico is None:
         st.stop()
 
