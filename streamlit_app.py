@@ -1,5 +1,4 @@
 import streamlit as st
-from PIL import Image
 
 # Diccionario que contiene los valores de LoD y P99 para cada tipo de ensayo de troponina
 ensayos_troponinas = {
@@ -171,23 +170,10 @@ def mostrar_descargo_responsabilidad():
 
 # Función principal para ejecutar el algoritmo completo
 def main():
-    # Cargar las imágenes desde el directorio local
-    logo_1 = Image.open('logo1.png')
-    logo_2 = Image.open('logo2.png')
-
-    # Títulos y logos
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col1:
-        st.image(logo_1, width=100)  # Mostrar imagen local
-        
-    with col2:
-        st.title("Versión de prueba - Algoritmo 0-3/h de hs cTn I (Abbott/Architect)")
-        st.subheader("Autor: Javier Armando Rodriguez Prada. MD- MSc.")
-        st.markdown("Unidad de Investigación y Educación - Instituto del Corazón de Bucaramanga.")
-    
-    with col3:
-        st.image(logo_2, width=150)  # Mostrar otra imagen local
+    # Títulos y encabezados
+    st.title("Versión de prueba - Algoritmo 0-3/h de hs cTn I (Abbott/Architect)")
+    st.subheader("Autor: Javier Armando Rodriguez Prada. MD- MSc.")
+    st.markdown("Unidad de Investigación y Educación - Instituto del Corazón de Bucaramanga.")
 
     # Mostrar descargo de responsabilidad
     mostrar_descargo_responsabilidad()
