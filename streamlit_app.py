@@ -1,4 +1,4 @@
-import streamlit as st
+ import streamlit as st
 
 # Diccionario que contiene los valores de LoD y P99 para cada tipo de ensayo de troponina
 ensayos_troponinas = {
@@ -66,7 +66,7 @@ def ejecutar_escenario_b(valor_inicial, lod, p99, horas_dolor_toracico):
 
     if horas_dolor_toracico >= 3:
         st.write("Baja probabilidad de injuria miocárdica aguda.")
-        st.write("No se necesita segunda troponina. Considerar otros diagnósticos.")
+        st.write("No se necesita segunda troponina. Según los síntomas y EKG considerar Angina inestable u otros diagnósticos.")
     else:
         st.write("Dolor menor a 3 horas. Evaluar segunda troponina.")
         ejecutar_segunda_troponina(valor_inicial, p99)
@@ -90,7 +90,7 @@ def ejecutar_segunda_troponina(valor_inicial, p99):
         st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Realizar una tercera medición a las 6 horas de la admisión.")
         preguntar_tercera_troponina(valor_inicial, p99)
     elif delta < 0:  # Si hay un delta negativo, considerar fase descendente
-        st.write("Delta negativo. Considerar fase descendente de una injuria miocárdica previa.")
+        st.write("Delta negativo. Considerar fase descendente de la curva del biomarcador, posible consultador tardio.")
         st.write("Reevaluar los síntomas y ECG para definir la causa.")
         preguntar_sintomas_ecg()
     else:
@@ -114,7 +114,7 @@ def ejecutar_escenario_d1(valor_inicial, p99):
         st.write("Alta probabilidad de injuria miocárdica aguda.")
         preguntar_sintomas_ecg()
     elif delta < 0:
-        st.write("Delta negativo. Considerar resolución de la injuria miocárdica previa.")
+        st.write("Delta negativo. Considerar fase descendente de la curva del biomarcador, posible consultador tardio")
         preguntar_sintomas_ecg()
     else:
         st.write("Baja probabilidad de injuria miocárdica aguda.")
@@ -128,7 +128,7 @@ def ejecutar_escenario_d2():
 
 # Función para preguntar por la tercera troponina
 def preguntar_tercera_troponina(valor_inicial, p99):
-    tercera_tnc = st.radio("¿Desea realizar una tercera medición de troponina? (Recomendado solo para valores limítrofes)", ["Sí", "No"], key="tercera_tnc")
+    tercera_tnc = st.radio("¿Desea realizar una tercera medición de troponina? (Recomendado solo para valores o deltas limítrofes)", ["Sí", "No"], key="tercera_tnc")
     
     if tercera_tnc == "Sí":
         unidades_tercera = st.selectbox("Seleccione las unidades de la tercera Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_tercera")
@@ -143,7 +143,7 @@ def preguntar_tercera_troponina(valor_inicial, p99):
             st.write("Alta probabilidad de injuria miocárdica aguda con la tercera muestra.")
             preguntar_sintomas_ecg()
         elif delta_tercera < 0:
-            st.write("Delta negativo. Considerar resolución de la injuria miocárdica previa.")
+            st.write("Delta negativo. Considerar fase descendente de la curva del biomarcador, posible consultador tardio")
             preguntar_sintomas_ecg()
         else:
             st.write("Baja probabilidad de injuria miocárdica aguda.")
@@ -158,7 +158,7 @@ def preguntar_sintomas_ecg():
         st.write("Alta probabilidad de Infarto agudo al miocardio No ST.")
       
     else:
-        st.write("Considerar injuria miocárdica aguda no aterotrombótica.")
+        st.write("Considerar injuria miocárdica aguda no aterotrombótica, investigar otras causas.")
 
 # Función principal para ejecutar el algoritmo completo
 def main():
