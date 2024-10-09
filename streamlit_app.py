@@ -174,10 +174,17 @@ def main():
 
     # Flujo del algoritmo cuando NO hay elevación del segmento ST
     tipo_ensayo = st.selectbox("Seleccione el tipo de ensayo de troponina", ["T", "I"], key="tipo_ensayo")
-    referencia_p99 = st.selectbox("Seleccione el P99 de referencia", ["Global", "Hombre", "Mujer"], key="referencia_p99")
+    referencia_p99 = st.selectbox("Seleccione el P99 de referencia", ["Global", "Hombres", "Mujeres"], key="referencia_p99")
     
     ensayo = ensayos_troponinas[tipo_ensayo]
-    p99 = ensayo[f"P99_{referencia_p99.lower()}"]
+    # Corregir para usar las claves del diccionario correctamente
+    if referencia_p99 == "Global":
+        p99 = ensayo["P99_global"]
+    elif referencia_p99 == "Hombres":
+        p99 = ensayo["P99_hombres"]
+    elif referencia_p99 == "Mujeres":
+        p99 = ensayo["P99_mujeres"]
+
     lod = ensayo["LoD"]
 
     # Primera medición de troponina
