@@ -84,7 +84,7 @@ def ejecutar_segunda_troponina(valor_inicial, p99):
         st.write("Alta probabilidad de injuria miocárdica aguda.")
         preguntar_sintomas_ecg()
     elif delta >= 50 and valor_segunda_tnc_convertido < p99:
-        st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Realizar una tercera medición a las 6 horas.")
+        st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Realizar una tercera medición a las 6 horas de la admisión .")
         preguntar_tercera_troponina(valor_inicial, p99)
     else:
         st.write("Delta < 50%. Evaluar más muestras para confirmar el diagnóstico.")
@@ -114,10 +114,11 @@ def ejecutar_escenario_d1(valor_inicial, p99):
 def ejecutar_escenario_d2():
     st.write("Primera troponina >= 5xP99.")
     st.write("Alta probabilidad de injuria miocárdica aguda.")
+    preguntar_sintomas_ecg()
 
 # Función para preguntar por la tercera troponina
 def preguntar_tercera_troponina(valor_inicial, p99):
-    tercera_tnc = st.radio("¿Desea realizar una tercera medición de troponina? (Recomendado solo para deltas limítrofes)", ["Sí", "No"], key="tercera_tnc")
+    tercera_tnc = st.radio("¿Desea realizar una tercera medición de troponina? (Recomendado solo para valores limítrofes)", ["Sí", "No"], key="tercera_tnc")
     
     if tercera_tnc == "Sí":
         unidades_tercera = st.selectbox("Seleccione las unidades de la tercera Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_tercera")
@@ -139,14 +140,16 @@ def preguntar_tercera_troponina(valor_inicial, p99):
 # Función para preguntar por los síntomas y ECG
 def preguntar_sintomas_ecg():
     sintomas_ecg = st.radio("¿Síntomas y/o ECG indicativos de isquemia miocárdica aguda?", ["Sí", "No"], key="sintomas_ecg")
+    
     if sintomas_ecg == "Sí":
         st.write("Alta probabilidad de Infarto agudo al miocardio No ST.")
+      
     else:
         st.write("Considerar injuria miocárdica aguda no aterotrombótica.")
 
 # Función principal para ejecutar el algoritmo completo
 def main():
-    st.title("Versión de prueba - Algoritmo 0-3/h de hs cTn I (Abbott/Architect)")
+    st.title("Versión de prueba - Algoritmo 0-3/h de hs cTn")
     st.subheader("Autor: Javier Armando Rodriguez Prada. MD- MSc.")
     st.markdown("Unidad de Investigación y Educación - Instituto del Corazón de Bucaramanga.")
 
@@ -192,4 +195,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
