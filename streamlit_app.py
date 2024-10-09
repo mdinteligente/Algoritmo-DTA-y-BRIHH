@@ -58,7 +58,7 @@ def ejecutar_escenario_a():
     st.write("IAM-ST. Seguir las directrices de tratamiento de las guías vigentes para SCA ST.")
 
 # Función para ejecutar el escenario B (LoD <= troponina < P99, 3 o más horas de dolor)
-def ejecutar_escenario_b(valor_inicial, lod, horas_dolor_toracico):
+def ejecutar_escenario_b(valor_inicial, lod, p99, horas_dolor_toracico):
     st.write("Ejecutando Escenario B...")
 
     if horas_dolor_toracico >= 3:
@@ -66,10 +66,10 @@ def ejecutar_escenario_b(valor_inicial, lod, horas_dolor_toracico):
         st.write("No se necesita segunda troponina. Considerar otros diagnósticos.")
     else:
         st.write("Dolor menor a 3 horas. Evaluar segunda troponina.")
-        ejecutar_segunda_troponina(valor_inicial, lod, p99=None)
+        ejecutar_segunda_troponina(valor_inicial, p99)
 
 # Función para ejecutar la segunda troponina en escenario C o B con menos de 3 horas de dolor
-def ejecutar_segunda_troponina(valor_inicial, lod, p99):
+def ejecutar_segunda_troponina(valor_inicial, p99):
     st.write("Realizando segunda medición de troponina...")
 
     unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"], key="unidades_segunda")
@@ -182,9 +182,9 @@ def main():
 
     # Ejecutar el escenario correcto
     if escenario == "B":
-        ejecutar_escenario_b(valor_primera_tnc_convertido, lod, horas_dolor_toracico)
+        ejecutar_escenario_b(valor_primera_tnc_convertido, lod, p99, horas_dolor_toracico)
     elif escenario == "C":
-        ejecutar_segunda_troponina(valor_primera_tnc_convertido, lod, p99)
+        ejecutar_segunda_troponina(valor_primera_tnc_convertido, p99)
     elif escenario == "D1":
         ejecutar_escenario_d1(valor_primera_tnc_convertido, p99)
     elif escenario == "D2":
