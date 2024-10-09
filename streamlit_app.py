@@ -58,12 +58,8 @@ def ejecutar_escenario_a():
     st.write("IAM-ST. Seguir las directrices de tratamiento de las guías vigentes para SCA ST.")
 
 # Función para ejecutar el escenario B (LoD <= troponina < P99, 3 o más horas de dolor)
-def ejecutar_escenario_b(valor_inicial, lod):
+def ejecutar_escenario_b(valor_inicial, lod, horas_dolor_toracico):
     st.write("Ejecutando Escenario B...")
-
-    horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):", key="horas_dolor_b"))
-    if horas_dolor_toracico is None:
-        st.stop()
 
     if horas_dolor_toracico >= 3:
         st.write("Baja probabilidad de injuria miocárdica aguda.")
@@ -176,7 +172,7 @@ def main():
 
     valor_primera_tnc_convertido = convertir_unidades(valor_primera_tnc, unidades_primera)
 
-    # **Preguntar siempre por el tiempo de evolución del dolor torácico**
+    # Preguntar por el tiempo de evolución del dolor torácico solo una vez
     horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):", key="horas_dolor"))
     if horas_dolor_toracico is None:
         st.stop()
@@ -186,7 +182,7 @@ def main():
 
     # Ejecutar el escenario correcto
     if escenario == "B":
-        ejecutar_escenario_b(valor_primera_tnc_convertido, lod)
+        ejecutar_escenario_b(valor_primera_tnc_convertido, lod, horas_dolor_toracico)
     elif escenario == "C":
         ejecutar_segunda_troponina(valor_primera_tnc_convertido, p99)
     elif escenario == "D1":
