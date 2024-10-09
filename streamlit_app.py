@@ -22,7 +22,10 @@ def validar_valor_decimal(valor):
         if ',' in valor:
             st.error("Por favor, ingrese un número válido utilizando punto (.) para decimales.")
             return None
-        return float(valor)
+        valor_float = float(valor)
+        if valor_float <= 0:
+            st.warning("Advertencia: La troponina ingresada es 0 o menor, verifique el valor.")
+        return valor_float
     except ValueError:
         st.error("Por favor, ingrese un número válido.")
         return None
@@ -37,7 +40,7 @@ def convertir_unidades(valor, unidades):
 
 # Función para calcular el delta entre dos valores
 def calcular_y_mostrar_delta(valor_inicial, valor_final):
-    delta = abs(valor_final - valor_inicial) / valor_inicial * 100
+    delta = (valor_final - valor_inicial) / valor_inicial * 100
     st.write(f"Delta calculado: {delta:.2f}%")
     return delta
 
@@ -84,8 +87,12 @@ def ejecutar_segunda_troponina(valor_inicial, p99):
         st.write("Alta probabilidad de injuria miocárdica aguda.")
         preguntar_sintomas_ecg()
     elif delta >= 50 and valor_segunda_tnc_convertido < p99:
-        st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Realizar una tercera medición a las 6 horas de la admisión .")
+        st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Realizar una tercera medición a las 6 horas de la admisión.")
         preguntar_tercera_troponina(valor_inicial, p99)
+    elif delta < 0:  # Si hay un delta negativo, considerar fase descendente
+        st.write("Delta negativo. Considerar fase descendente de una injuria miocárdica previa.")
+        st.write("Reevaluar los síntomas y ECG para definir la causa.")
+        preguntar_sintomas_ecg()
     else:
         st.write("Delta < 50%. Evaluar más muestras para confirmar el diagnóstico.")
         preguntar_tercera_troponina(valor_inicial, p99)
@@ -105,6 +112,9 @@ def ejecutar_escenario_d1(valor_inicial, p99):
 
     if delta >= 20:
         st.write("Alta probabilidad de injuria miocárdica aguda.")
+        preguntar_sintomas_ecg()
+    elif delta < 0:
+        st.write("Delta negativo. Considerar resolución de la injuria miocárdica previa.")
         preguntar_sintomas_ecg()
     else:
         st.write("Baja probabilidad de injuria miocárdica aguda.")
@@ -131,6 +141,9 @@ def preguntar_tercera_troponina(valor_inicial, p99):
         
         if delta_tercera >= 50 and valor_tercera_tnc_convertido >= p99:
             st.write("Alta probabilidad de injuria miocárdica aguda con la tercera muestra.")
+            preguntar_sintomas_ecg()
+        elif delta_tercera < 0:
+            st.write("Delta negativo. Considerar resolución de la injuria miocárdica previa.")
             preguntar_sintomas_ecg()
         else:
             st.write("Baja probabilidad de injuria miocárdica aguda.")
