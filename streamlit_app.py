@@ -44,43 +44,36 @@ def calcular_y_mostrar_delta(valor_inicial, valor_final):
 # Función para identificar el escenario correcto basado en el valor de troponina
 def identificar_escenario(valor_inicial, lod, p99):
     if valor_inicial < lod:
-        return "A"
+        return "B"  # Escenario B: troponina inicial menor al LoD
     elif valor_inicial >= lod and valor_inicial < p99:
-        return "B"
+        return "C"  # Escenario C: troponina inicial entre LoD y P99
     elif valor_inicial >= p99 and valor_inicial < p99 * 5:
-        return "C"
+        return "D1"  # Escenario D1: troponina inicial mayor o igual al P99 pero menor a 5xP99
     else:
-        return "D"
+        return "D2"  # Escenario D2: troponina inicial mayor o igual a 5xP99
 
-# Función para ejecutar el escenario A
+# Función para ejecutar el escenario A (ST elevado)
 def ejecutar_escenario_a():
-    st.write("Ejecutando Escenario A...")
-    st.write("Baja probabilidad de injuria miocárdica aguda.")
-    st.write("No se necesita segunda troponina.")
-    st.write("Considerar angina inestable u otros diagnósticos diferenciales.")
+    st.write("Elevación del segmento ST detectada.")
+    st.write("IAM-ST. Seguir las directrices de tratamiento de las guías vigentes para SCA ST.")
 
-# Función para ejecutar el escenario B (LoD <= troponina < P99)
-def ejecutar_escenario_b(valor_inicial, p99):
+# Función para ejecutar el escenario B (LoD <= troponina < P99, 3 o más horas de dolor)
+def ejecutar_escenario_b(valor_inicial, lod):
     st.write("Ejecutando Escenario B...")
 
-    # Preguntar por las horas de evolución del dolor torácico
     horas_dolor_toracico = validar_valor_decimal(st.text_input("Ingrese el tiempo de evolución del dolor torácico (en horas):"))
     if horas_dolor_toracico is None:
         st.stop()
 
-    # Si el tiempo es mayor o igual a 3 horas, baja probabilidad de injuria miocárdica aguda
     if horas_dolor_toracico >= 3:
         st.write("Baja probabilidad de injuria miocárdica aguda.")
-        st.write("Baja probabilidad de infarto agudo al miocárdico.")
-        st.write("Según los síntomas y el ECG, considerar angina inestable u otros diagnósticos diferenciales.")
-    # Si el tiempo es menor a 3 horas, sugerir segunda troponina
+        st.write("No se necesita segunda troponina. Considerar otros diagnósticos.")
     else:
-        st.write("Tomar segunda troponina y reevaluar.")
-        ejecutar_segunda_troponina(valor_inicial, p99)
+        st.write("Dolor menor a 3 horas. Evaluar segunda troponina.")
+        ejecutar_segunda_troponina(valor_inicial, lod)
 
-# Función para ejecutar la segunda troponina y pasar al escenario B o C
+# Función para ejecutar la segunda troponina en escenario C o B con menos de 3 horas de dolor
 def ejecutar_segunda_troponina(valor_inicial, p99):
-    # Pedir segunda troponina
     st.write("Realizando segunda medición de troponina...")
 
     unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"])
@@ -91,37 +84,40 @@ def ejecutar_segunda_troponina(valor_inicial, p99):
     valor_segunda_tnc_convertido = convertir_unidades(valor_segunda_tnc, unidades_segunda)
     delta = calcular_y_mostrar_delta(valor_inicial, valor_segunda_tnc_convertido)
 
-    # Si la segunda troponina es mayor o igual al P99, ejecutar escenario C
-    if valor_segunda_tnc_convertido >= p99:
-        ejecutar_escenario_c(valor_inicial, p99, valor_segunda_tnc_convertido)
-    else:
-        ejecutar_escenario_b(valor_inicial, p99)
-
-# Función para ejecutar el escenario C (P99 <= troponina < 5xP99)
-def ejecutar_escenario_c(valor_inicial, p99, valor_segunda_tnc):
-    st.write("Ejecutando Escenario C...")
-
-    delta = calcular_y_mostrar_delta(valor_inicial, valor_segunda_tnc)
-
-    # Alta probabilidad de injuria miocárdica solo si el delta >= 50% y la segunda troponina >= P99
-    if delta >= 50 and valor_segunda_tnc >= p99:
+    if delta >= 50 and valor_segunda_tnc_convertido >= p99:
         st.write("Alta probabilidad de injuria miocárdica aguda.")
         preguntar_sintomas_ecg()
-    elif delta >= 50 and valor_segunda_tnc < p99:
-        st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Sugerir una tercera medición de troponina.")
+    elif delta >= 50 and valor_segunda_tnc_convertido < p99:
+        st.write("Delta >= 50%, pero la segunda troponina es menor al P99. Realizar una tercera medición a las 6 horas.")
         preguntar_tercera_troponina(valor_inicial, p99)
-    elif delta >= 20 and valor_segunda_tnc >= p99:
-        st.write("Delta entre 20% y 50%. Alta probabilidad de injuria miocárdica aguda.")
-        preguntar_sintomas_ecg()
     else:
-        st.write("Delta < 20% o segunda troponina < P99. Evaluar más muestras para confirmar el diagnóstico.")
+        st.write("Delta < 50%. Evaluar más muestras para confirmar el diagnóstico.")
         preguntar_tercera_troponina(valor_inicial, p99)
 
-# Función para ejecutar el escenario D (troponina >= 5xP99)
-def ejecutar_escenario_d():
-    st.write("Ejecutando Escenario D...")
+# Función para ejecutar el escenario D1 (primera troponina >= P99 pero menor a 5xP99)
+def ejecutar_escenario_d1(valor_inicial, p99):
+    st.write("Primera troponina >= P99 pero menor a 5xP99.")
+    st.write("Realizar segunda medición de troponina.")
+
+    unidades_segunda = st.selectbox("Seleccione las unidades de la segunda Tnc AS:", ["ng/mL", "ng/L", "pg/mL"])
+    valor_segunda_tnc = validar_valor_decimal(st.text_input("Ingrese el valor de la segunda Tnc AS:"))
+    if valor_segunda_tnc is None:
+        st.stop()
+
+    valor_segunda_tnc_convertido = convertir_unidades(valor_segunda_tnc, unidades_segunda)
+    delta = calcular_y_mostrar_delta(valor_inicial, valor_segunda_tnc_convertido)
+
+    if delta >= 20:
+        st.write("Alta probabilidad de injuria miocárdica aguda.")
+        preguntar_sintomas_ecg()
+    else:
+        st.write("Baja probabilidad de injuria miocárdica aguda.")
+        preguntar_tercera_troponina(valor_inicial, p99)
+
+# Función para ejecutar el escenario D2 (troponina >= 5xP99)
+def ejecutar_escenario_d2():
+    st.write("Primera troponina >= 5xP99.")
     st.write("Alta probabilidad de injuria miocárdica aguda.")
-    preguntar_sintomas_ecg()
 
 # Función para preguntar por la tercera troponina
 def preguntar_tercera_troponina(valor_inicial, p99):
@@ -152,36 +148,16 @@ def preguntar_sintomas_ecg():
     else:
         st.write("Considerar injuria miocárdica aguda no aterotrombótica.")
 
-# **Función para mostrar el descargo de responsabilidad**
-def mostrar_descargo_responsabilidad():
-    st.markdown("""
-    **Descargo de responsabilidad**
-
-    Al utilizar esta herramienta, usted acepta que cualquier decisión o tratamiento médico se basará en una evaluación clínica completa y no únicamente en el uso de esta herramienta.
-
-    La herramienta está destinada a ser utilizada únicamente por médicos cardiólogos y médicos de urgencias. Ninguna persona debe entender ni utilizar la información contenida en este documento como sustituto de la obtención de asesoramiento o tratamiento médico profesional.
-
-    El uso de esta herramienta es bajo su propio riesgo. El Instituto del Corazón de Bucaramanga S.A. no se responsabiliza de cualquier decisión o acción tomada basándose en la información contenida o proporcionada por esta herramienta.
-    """)
-
-    if st.radio("¿Acepta los términos del descargo de responsabilidad?", ["Sí", "No"]) == "No":
-        st.write("Gracias por su interés en la aplicación.")
-        st.stop()
-
 # Función principal para ejecutar el algoritmo completo
 def main():
-    # Títulos y encabezados
     st.title("Versión de prueba - Algoritmo 0-3/h de hs cTn I (Abbott/Architect)")
     st.subheader("Autor: Javier Armando Rodriguez Prada. MD- MSc.")
     st.markdown("Unidad de Investigación y Educación - Instituto del Corazón de Bucaramanga.")
 
-    # Mostrar descargo de responsabilidad
-    mostrar_descargo_responsabilidad()
-
     # Preguntar si hay elevación del segmento ST
     st_segmento_st = st.radio("¿Hay elevación del segmento ST?", ["Sí", "No"])
     if st_segmento_st == "Sí":
-        st.write("IAMEST (A1.1). Seguir las directrices de tratamiento de las guías vigentes para SCA ST.")
+        ejecutar_escenario_a()
         st.stop()
 
     # Flujo del algoritmo cuando NO hay elevación del segmento ST
@@ -209,14 +185,14 @@ def main():
     escenario = identificar_escenario(valor_primera_tnc_convertido, lod, p99)
 
     # Ejecutar el escenario correcto
-    if escenario == "A":
-        ejecutar_escenario_a()
-    elif escenario == "B":
-        ejecutar_escenario_b(valor_primera_tnc_convertido, p99)
+    if escenario == "B":
+        ejecutar_escenario_b(valor_primera_tnc_convertido, lod)
     elif escenario == "C":
-        ejecutar_escenario_c(valor_primera_tnc_convertido, p99, valor_primera_tnc_convertido)
-    elif escenario == "D":
-        ejecutar_escenario_d()
+        ejecutar_segunda_troponina(valor_primera_tnc_convertido, p99)
+    elif escenario == "D1":
+        ejecutar_escenario_d1(valor_primera_tnc_convertido, p99)
+    elif escenario == "D2":
+        ejecutar_escenario_d2()
 
 if __name__ == "__main__":
     main()
