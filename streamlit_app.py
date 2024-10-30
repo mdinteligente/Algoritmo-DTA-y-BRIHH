@@ -4,19 +4,24 @@ import pandas as pd
 # Configuración del título y logos
 st.set_page_config(page_title="Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH")
 
-# Cargar los logos locales
-logo_izquierdo = "logo_izquierdo.png"
-logo_derecho = "logo_derecho.png"
+# Cargar los logos desde URLs (repositorio de GitHub)
+logo_izquierdo = "https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/0c4c02744711b3f4093107f85d702883339ee703/logo_izquierdo.png "
+logo_derecho = "https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/0c4c02744711b3f4093107f85d702883339ee703/logo_derecho.jpg"
 
 # Crear columnas para los logos y el título
-col1, col2, col3 = st.columns([1, 4, 1])
-with col1:
-    st.image(logo_izquierdo, use_column_width=False, width=150)
-with col2:
-    st.title("Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH nuevo o presumiblemente nuevo")
-    st.caption("Autor: Javier A. Rodríguez, MD, MSc")
-with col3:
-    st.image(logo_derecho, use_column_width=False, width=150)
+st.markdown(
+    """
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <img src="{logo_izquierdo}" style="width: 150px;">
+        <div style="text-align: center;">
+            <h1>Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH nuevo o presumiblemente nuevo</h1>
+            <p>Autor: Javier A. Rodríguez, MD, MSc</p>
+        </div>
+        <img src="{logo_derecho}" style="width: 150px;">
+    </div>
+    """.format(logo_izquierdo=logo_izquierdo, logo_derecho=logo_derecho),
+    unsafe_allow_html=True
+)
 
 # Funciones para los algoritmos
 def sgarbossa_criteria():
