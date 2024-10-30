@@ -53,9 +53,7 @@ def barcelona_algorithm():
         st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/bb87e41f5c54122b762cdeb1074aeb6c9420af96/Cualquier%20desviacion%20concordante%20del%20segmento%20ST.PNG?raw=true", caption="Desviación del ST concordante con la polaridad del QRS (Barcelona)")
         return True
     if st.checkbox("Desviación del ST ≥ 1 mm discordante con la polaridad del QRS y R|S máximo ≤ 6 mm", key="barcelona_2"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/fae2df0075b52aff4eebeb013a0ceb7277620a90/Desviaci%C3%B3n%20del%20segmento%20ST%20m%C3%A1s%20%20QRS%20menor%20o%20igual%20a%20%200.6%20mm.PNG?raw=true" 
-
-", caption="Desviación del ST discordante con la polaridad del QRS (Barcelona)")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/fae2df0075b52aff4eebeb013a0ceb7277620a90/Desviaci%C3%B3n%20del%20segmento%20ST%20m%C3%A1s%20%20QRS%20menor%20o%20igual%20a%20%200.6%20mm.PNG?raw=true", caption="Desviación del ST discordante con la polaridad del QRS (Barcelona)")
         return True
     return False
 
