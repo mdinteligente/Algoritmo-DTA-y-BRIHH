@@ -69,7 +69,7 @@ def calcular_metricas():
     n_pacientes = 1000
 
     # Informar explícitamente la prevalencia
-    st.info("Solo el 40% de los pacientes tiene isquemia miocárdica aguda oculta en el BRIHH (probabilidad pre-test)")
+    st.info("Solo el 40% de los pacientes con dolor torácico agudo y BRIHH nuevo o presumiblente nuevo tiene isquemia miocárdica aguda (probabilidad pre-test)")
 
     # Datos de sensibilidad y especificidad
     sensibilidad = [0.33, 0.80, 0.93]
