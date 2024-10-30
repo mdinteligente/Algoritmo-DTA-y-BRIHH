@@ -5,33 +5,31 @@ import pandas as pd
 st.set_page_config(page_title="Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH")
 
 # Cargar los logos desde URLs (repositorio de GitHub)
-logo_izquierdo = "https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/0c4c02744711b3f4093107f85d702883339ee703/logo_izquierdo.png "
-logo_derecho = "https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/0c4c02744711b3f4093107f85d702883339ee703/logo_derecho.jpg"
+logo_izquierdo = "https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/0c4c02744711b3f4093107f85d702883339ee703/logo_izquierdo.png?raw=true"
+logo_derecho = "https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/0c4c02744711b3f4093107f85d702883339ee703/logo_derecho.jpg?raw=true"
 
 # Crear columnas para los logos y el título
-st.markdown(
-    """
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <img src="{logo_izquierdo}" style="width: 150px;">
-        <div style="text-align: center;">
-            <h1>Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH nuevo o presumiblemente nuevo</h1>
-            <p>Autor: Javier A. Rodríguez, MD, MSc</p>
-        </div>
-        <img src="{logo_derecho}" style="width: 150px;">
-    </div>
-    """.format(logo_izquierdo=logo_izquierdo, logo_derecho=logo_derecho),
-    unsafe_allow_html=True
-)
+col1, col2, col3 = st.columns([1, 4, 1])
+with col1:
+    st.image(logo_izquierdo, use_column_width=False, width=150)
+with col2:
+    st.title("Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH nuevo o presumiblemente nuevo")
+    st.caption("Autor: Javier A. Rodríguez, MD, MSc")
+with col3:
+    st.image(logo_derecho, use_column_width=False, width=150)
 
 # Funciones para los algoritmos
 def sgarbossa_criteria():
     st.header("Criterios de Sgarbossa")
     score = 0
     if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación", key="sgarbossa_1"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/sgarbossa_1.png?raw=true", caption="Elevación del ST concordante con el QRS")
         score += 5
     if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3", key="sgarbossa_2"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/sgarbossa_2.png?raw=true", caption="Depresión del ST en V1, V2 o V3")
         score += 3
     if st.checkbox("Elevación del ST ≥ 5 mm discordante con el QRS en cualquier derivación", key="sgarbossa_3"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/sgarbossa_3.png?raw=true", caption="Elevación del ST discordante con el QRS")
         score += 2
     st.write(f"**Puntuación Total Sgarbossa:** {score}")
     return score
@@ -39,18 +37,23 @@ def sgarbossa_criteria():
 def smith_modified_sgarbossa():
     st.header("Criterios Modificados de Sgarbossa (Smith)")
     if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación", key="smith_1"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/smith_1.png?raw=true", caption="Elevación del ST concordante con el QRS (Smith)")
         return True
     if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3", key="smith_2"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/smith_2.png?raw=true", caption="Depresión del ST en V1, V2 o V3 (Smith)")
         return True
     if st.checkbox("Relación ST/S ≤ -0.25 indicando discordancia excesiva del ST", key="smith_3"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/smith_3.png?raw=true", caption="Relación ST/S ≤ -0.25 (Smith)")
         return True
     return False
 
 def barcelona_algorithm():
     st.header("Algoritmo de Barcelona")
     if st.checkbox("Desviación del ST ≥ 1 mm concordante con la polaridad del QRS en cualquier derivación", key="barcelona_1"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/barcelona_1.png?raw=true", caption="Desviación del ST concordante con la polaridad del QRS (Barcelona)")
         return True
     if st.checkbox("Desviación del ST ≥ 1 mm discordante con la polaridad del QRS y R|S máximo ≤ 6 mm", key="barcelona_2"):
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/barcelona_2.png?raw=true", caption="Desviación del ST discordante con la polaridad del QRS (Barcelona)")
         return True
     return False
 
@@ -61,15 +64,26 @@ is_barcelona_positive = barcelona_algorithm()
 
 # Presentación del cuadro comparativo
 def calcular_metricas():
+    prevalencia = 0.4
+    n_pacientes = 1000
+
+    # Informar explícitamente la prevalencia
+    st.info("Solo el 40% de los pacientes tenía isquemia miocárdica aguda oculta en el BRIHH (probabilidad pre-test)")
+
+    # Datos de sensibilidad y especificidad
+    sensibilidad = [0.33, 0.80, 0.93]
+    especificidad = [0.99, 0.99, 0.94]
+
+    # Cálculo de probabilidades post-test y métricas diagnósticas
     data = {
         "Algoritmo": ["Sgarbossa", "Modified Sgarbossa", "Barcelona"],
-        "Probabilidad Post-test (%)": [33, 80, 93],
-        "Sensibilidad (%)": [33, 80, 93],
-        "Especificidad (%)": [99, 99, 94],
-        "LR+": [33/99, 80/99, 93/94],
-        "LR-": [(100-33)/(100-99), (100-80)/(100-99), (100-93)/(100-94)],
-        "Falsos Positivos": [1000 * 0.01, 1000 * 0.01, 1000 * 0.06],
-        "Falsos Negativos": [1000 * 0.67, 1000 * 0.20, 1000 * 0.07]
+        "Probabilidad Post-test (%)": [round((sens * prevalencia) / ((sens * prevalencia) + ((1 - espec) * (1 - prevalencia))) * 100, 2) for sens, espec in zip(sensibilidad, especificidad)],
+        "Sensibilidad (%)": [sens * 100 for sens in sensibilidad],
+        "Especificidad (%)": [espec * 100 for espec in especificidad],
+        "LR+": [round(sens / (1 - espec), 2) for sens, espec in zip(sensibilidad, especificidad)],
+        "LR-": [round((1 - sens) / espec, 2) for sens, espec in zip(sensibilidad, especificidad)],
+        "Falsos Positivos": [round(n_pacientes * (1 - espec) * (1 - prevalencia)) for espec in especificidad],
+        "Falsos Negativos": [round(n_pacientes * (1 - sens) * prevalencia) for sens in sensibilidad]
     }
     df = pd.DataFrame(data)
     st.table(df)
