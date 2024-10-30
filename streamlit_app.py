@@ -87,7 +87,8 @@ def calcular_metricas():
     }
     df = pd.DataFrame(data)
     st.caption("Los valores de falsos positivos y falsos negativos están calculados para una muestra de 1000 pacientes.")
-st.table(df)
+if st.button("Calcular Métricas Diagnósticas"):
+    st.table(df)
 
 if st.button("Calcular Métricas Diagnósticas"):
     calcular_metricas()
