@@ -27,30 +27,30 @@ st.markdown(
 def sgarbossa_criteria():
     st.header("Criterios de Sgarbossa")
     score = 0
-    if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación"):
+    if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación", key="sgarbossa_1"):
         score += 5
-    if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3"):
+    if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3", key="sgarbossa_2"):
         score += 3
-    if st.checkbox("Elevación del ST ≥ 5 mm discordante con el QRS en cualquier derivación"):
+    if st.checkbox("Elevación del ST ≥ 5 mm discordante con el QRS en cualquier derivación", key="sgarbossa_3"):
         score += 2
     st.write(f"**Puntuación Total Sgarbossa:** {score}")
     return score
 
 def smith_modified_sgarbossa():
     st.header("Criterios Modificados de Sgarbossa (Smith)")
-    if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación"):
+    if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación", key="smith_1"):
         return True
-    if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3"):
+    if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3", key="smith_2"):
         return True
-    if st.checkbox("Relación ST/S ≤ -0.25 indicando discordancia excesiva del ST"):
+    if st.checkbox("Relación ST/S ≤ -0.25 indicando discordancia excesiva del ST", key="smith_3"):
         return True
     return False
 
 def barcelona_algorithm():
     st.header("Algoritmo de Barcelona")
-    if st.checkbox("Desviación del ST ≥ 1 mm concordante con la polaridad del QRS en cualquier derivación"):
+    if st.checkbox("Desviación del ST ≥ 1 mm concordante con la polaridad del QRS en cualquier derivación", key="barcelona_1"):
         return True
-    if st.checkbox("Desviación del ST ≥ 1 mm discordante con la polaridad del QRS y R|S máximo ≤ 6 mm"):
+    if st.checkbox("Desviación del ST ≥ 1 mm discordante con la polaridad del QRS y R|S máximo ≤ 6 mm", key="barcelona_2"):
         return True
     return False
 
