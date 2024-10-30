@@ -16,7 +16,7 @@ with col2:
     st.markdown("<h3 style='text-align: center;'>{}</h3>".format("Algoritmos para detección de isquemia miocárdica aguda en pacientes con dolor torácico agudo y BRIHH nuevo o presumiblemente nuevo"), unsafe_allow_html=True)
     st.caption("Autor: Javier A. Rodríguez, MD, MSc")
 with col3:
-    st.image(logo_derecho, use_column_width=False, width=150)
+    st.image(logo_derecho, use_column_width=False, width=100)
 
 # Funciones para los algoritmos
 def sgarbossa_criteria():
