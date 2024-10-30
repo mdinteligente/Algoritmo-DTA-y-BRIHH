@@ -78,7 +78,7 @@ def calcular_metricas():
     # Cálculo de probabilidades post-test y métricas diagnósticas
     data = {
         "Algoritmo": ["Sgarbossa", "Modified Sgarbossa", "Barcelona"],
-        "Probabilidad Post-test (%)": [round((sens * prevalencia) / ((sens * prevalencia) + ((1 - espec) * (1 - prevalencia))) * 100, 2) for sens, espec in zip(sensibilidad, especificidad)],
+        "Probabilidad Post-test (%)": [round((sens * prevalencia, 2) / ((sens * prevalencia) + ((1 - espec) * (1 - prevalencia))) * 100, 2) for sens, espec in zip(sensibilidad, especificidad)],
         "Sensibilidad (%)": [round(sens * 100, 2) for sens in sensibilidad],
         "Especificidad (%)": [round(espec * 100, 2) for espec in especificidad],
         "LR+": [round(sens / (1 - espec), 2) for sens, espec in zip(sensibilidad, especificidad)],
