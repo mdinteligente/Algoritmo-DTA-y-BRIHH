@@ -23,13 +23,13 @@ def sgarbossa_criteria():
     st.header("Criterios de Sgarbossa")
     score = 0
     if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación", key="sgarbossa_1"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/sgarbossa_1.png?raw=true", caption="Elevación del ST concordante con el QRS")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/cf7a40979e11c8c01ffd1bc86091bc43e2b2b4d7/Desviacion%20positiva%20concordante.PNG ", caption="Elevación del ST concordante con el QRS")
         score += 5
     if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3", key="sgarbossa_2"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/sgarbossa_2.png?raw=true", caption="Depresión del ST en V1, V2 o V3")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/cf7a40979e11c8c01ffd1bc86091bc43e2b2b4d7/Desviacion%20negativa%20concordante.PNG ", caption="Depresión del ST en V1, V2 o V3")
         score += 3
     if st.checkbox("Elevación del ST ≥ 5 mm discordante con el QRS en cualquier derivación", key="sgarbossa_3"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/sgarbossa_3.png?raw=true", caption="Elevación del ST discordante con el QRS")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/cf7a40979e11c8c01ffd1bc86091bc43e2b2b4d7/Desviacion%20mayor%20o%20igual%20a%205%20mm%20discordante.PNG ", caption="Elevación del ST discordante con el QRS")
         score += 2
     st.write(f"**Puntuación Total Sgarbossa:** {score}")
     return score
@@ -37,13 +37,13 @@ def sgarbossa_criteria():
 def smith_modified_sgarbossa():
     st.header("Criterios Modificados de Sgarbossa (Smith)")
     if st.checkbox("Elevación del ST ≥ 1 mm concordante con el QRS en cualquier derivación", key="smith_1"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/smith_1.png?raw=true", caption="Elevación del ST concordante con el QRS (Smith)")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/cf7a40979e11c8c01ffd1bc86091bc43e2b2b4d7/Desviacion%20positiva%20concordante.PNG ")
         return True
     if st.checkbox("Depresión del ST ≥ 1 mm en V1, V2 o V3", key="smith_2"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/smith_2.png?raw=true", caption="Depresión del ST en V1, V2 o V3 (Smith)")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/cf7a40979e11c8c01ffd1bc86091bc43e2b2b4d7/Desviacion%20negativa%20concordante.PNG ", caption="Depresión del ST en V1, V2 o V3 (Smith)")
         return True
     if st.checkbox("Relación ST/S ≤ -0.25 indicando discordancia excesiva del ST", key="smith_3"):
-        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/main/figuras/smith_3.png?raw=true", caption="Relación ST/S ≤ -0.25 (Smith)")
+        st.image("https://github.com/mdinteligente/Algoritmo-DTA-y-BRIHH/blob/f507334992da9b4d39deb2c0df68f3170f90c89e/Sgarbosa%20modificado.PNG", caption="Relación ST/S ≤ -0.25 (Smith)")
         return True
     return False
 
