@@ -68,7 +68,7 @@ def calcular_metricas():
     n_pacientes = 1000
 
     # Informar explícitamente la prevalencia
-    st.info("Solo el 40% de los pacientes tenía isquemia miocárdica aguda oculta en el BRIHH (probabilidad pre-test)")
+    st.info("Solo el 40% de los pacientes tiene isquemia miocárdica aguda oculta en el BRIHH (probabilidad pre-test)")
 
     # Datos de sensibilidad y especificidad
     sensibilidad = [0.33, 0.80, 0.93]
@@ -78,15 +78,16 @@ def calcular_metricas():
     data = {
         "Algoritmo": ["Sgarbossa", "Modified Sgarbossa", "Barcelona"],
         "Probabilidad Post-test (%)": [round((sens * prevalencia) / ((sens * prevalencia) + ((1 - espec) * (1 - prevalencia))) * 100, 2) for sens, espec in zip(sensibilidad, especificidad)],
-        "Sensibilidad (%)": [sens * 100 for sens in sensibilidad],
-        "Especificidad (%)": [espec * 100 for espec in especificidad],
+        "Sensibilidad (%)": [round(sens * 100, 2) for sens in sensibilidad],
+        "Especificidad (%)": [round(espec * 100, 2) for espec in especificidad],
         "LR+": [round(sens / (1 - espec), 2) for sens, espec in zip(sensibilidad, especificidad)],
         "LR-": [round((1 - sens) / espec, 2) for sens, espec in zip(sensibilidad, especificidad)],
         "Falsos Positivos": [round(n_pacientes * (1 - espec) * (1 - prevalencia)) for espec in especificidad],
         "Falsos Negativos": [round(n_pacientes * (1 - sens) * prevalencia) for sens in sensibilidad]
     }
     df = pd.DataFrame(data)
-    st.table(df)
+    st.caption("Los valores de falsos positivos y falsos negativos están calculados para una muestra de 1000 pacientes.")
+st.table(df)
 
 if st.button("Calcular Métricas Diagnósticas"):
     calcular_metricas()
