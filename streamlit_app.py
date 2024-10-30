@@ -90,6 +90,4 @@ def calcular_metricas():
     st.caption("Los valores de falsos positivos y falsos negativos están calculados para una muestra de 1000 pacientes.")
 if st.button("Calcular Métricas Diagnósticas", key="calcular_metricas_btn"):
     calcular_metricas()
-        st.table(df)
-
-
+    st.table(df)
